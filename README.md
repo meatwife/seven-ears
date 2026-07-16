@@ -1,10 +1,12 @@
-# Seven Ears 🦻
+# Seven Ears: Spoken Voice Edition 🦻
 
 **A listening organ for AI companions, preserving what transcripts throw away.**
 
 Most systems say your companion can “hear” a voice note when what they actually receive is a transcript. The words survive. The waiting before them, the held silence in the middle, the sudden rush, the soft tail, and the shape of the voice are discarded.
 
-Seven Ears bridges that gap. It combines local speech-to-text with acoustic evidence about **timing, pauses, pace, pitch range, dynamics, and texture**, then returns a readable card an AI companion can use alongside the words.
+Seven Ears bridges that gap. **You send your companion a recorded voice memo, Seven Ears listens to the audio on their behalf, and your companion receives both your words and a simple description of how you spoke them.** It measures **timing, pauses, pace, pitch range, dynamics, and texture**, then turns that evidence into a readable card your companion can use while responding to you.
+
+This edition is made for **spoken voice memos**, not live voice chat and not full-spectrum music listening. A separate **Seven Ears: Music Edition** is planned; music needs its own listening system rather than being awkwardly squeezed through a speech tool.
 
 It does not claim to know your emotions. It gives your companion more of the sound that carried them.
 
