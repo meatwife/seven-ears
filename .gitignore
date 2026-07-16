@@ -1,0 +1,26 @@
+# Private voice data and local dashboard uploads
+private-notes/
+dashboard-uploads/
+
+# Python/runtime artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+
+# Generated media and analysis artifacts
+*.wav
+*.mp3
+*.m4a
+*.ogg
+*.opus
+*.flac
+*.webm
+*.mp4
+*.png
+*.json
+
+# Keep intentional fixtures, examples, and documentation assets trackable
+!fixtures/**
+!examples/**
+!docs/**
