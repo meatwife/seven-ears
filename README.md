@@ -6,7 +6,7 @@ Most systems say your companion can “hear” a voice note when what they actua
 
 Seven Ears bridges that gap. **You send your companion a recorded voice memo, Seven Ears listens to the audio on their behalf, and your companion receives both your words and a simple description of how you spoke them.** It measures **timing, pauses, pace, pitch range, dynamics, and texture**, then turns that evidence into a readable card your companion can use while responding to you.
 
-This edition is made for **spoken voice memos**, not live voice chat and not full-spectrum music listening. A separate **Seven Ears: Music Edition** is planned; music needs its own listening system rather than being awkwardly squeezed through a speech tool.
+This edition is made for **spoken voice memos**, not live voice chat and not full-spectrum music listening. Music gets its own listening system rather than being awkwardly squeezed through a speech tool: see **[Seven Ears: Music Edition](MUSIC.md)**, which ships in this repository as an experimental sibling.
 
 It does not claim to know your emotions. It gives your companion more of the sound that carried them.
 
@@ -202,7 +202,7 @@ Your surrounding agent harness may have its own storage, logs, attachment handli
 - Broad pitch estimation currently uses a 70–400 Hz search window. It is a rough contour aid, not clinical voice analysis.
 - Background fans, compression, clipping, whispers, singing, and overlapping speakers can confuse segmentation and transcription.
 - Brightness and dynamics describe the recording as well as the speaker. Microphone and room acoustics matter.
-- V1 is built for short spoken voice notes. Music and sung-voice analysis deserve a separate, intentional layer rather than inflated claims here.
+- V1 is built for short spoken voice notes. Music and sung-voice analysis live in the separate, intentional [Music Edition](MUSIC.md) rather than as inflated claims here.
 
 ## Tests
 
