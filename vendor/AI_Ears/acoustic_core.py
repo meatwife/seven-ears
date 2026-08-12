@@ -93,20 +93,48 @@ def analyze_acoustic(wav_path: str) -> dict:
 
     flux = np.maximum(0, np.diff(spectrum, axis=0)).sum(axis=1)
     tempo_bpm = None
-    if len(flux) > 8:
+    # Absolute activity gate, BEFORE any periodicity test. A steady tone has no
+    # onsets at all, so its flux is pure numerical jitter -- and normalising the
+    # autocorrelation by ac[0] rescales that jitter into a confident-looking
+    # peak. The salience test alone cannot catch it, because after division the
+    # jitter genuinely is periodic. (Measured on this extract: a 440 Hz sine
+    # still returned 184.6 BPM with the peak/salience guard in place.)
+    # Threshold: onset flux relative to mean frame energy separates cleanly --
+    #   steady sine 0.0004 | white noise 0.2674 | 120 BPM click 15.39
+    # a 668x gap whose geometric midpoint is 0.0103, so 0.01 sits ~25x above the
+    # case it rejects and ~27x below the nearest case it must accept. Chosen from
+    # that spread rather than tuned until the three test signals agreed with me.
+    frame_energy = float(spectrum.sum(axis=1).mean())
+    has_onsets = float(flux.max()) > 0.01 * (frame_energy + 1e-9)
+    if len(flux) > 8 and has_onsets:
         flux = flux - flux.mean()
         # FFT autocorrelation is equivalent to np.correlate(..., mode="full")
         # for the non-negative lags used here, while scaling to longer clips.
         fft_size = 1 << (2 * len(flux) - 1).bit_length()
         transformed = np.fft.rfft(flux, n=fft_size)
         autocorrelation = np.fft.irfft(transformed * np.conj(transformed), n=fft_size)[:len(flux)]
+        # Normalise so the salience thresholds below are scale-free, matching
+        # upstream hear_core.py and seven_ears_music.estimate_tempo.
+        if autocorrelation[0] > 0:
+            autocorrelation = autocorrelation / autocorrelation[0]
         frames_per_second = sample_rate / hop
         low = int(frames_per_second * 60 / 240)
-        high = int(frames_per_second * 60 / 50)
-        if high < len(autocorrelation) and high > low:
-            lag = low + int(np.argmax(autocorrelation[low:high]))
-            if lag > 0:
-                tempo_bpm = 60.0 * frames_per_second / lag
+        high = min(int(frames_per_second * 60 / 50), len(autocorrelation) - 1)
+        if high > low + 2:
+            # A plain argmax over the band returns its largest value whether or
+            # not that value is a peak, so a signal with no beat still gets a
+            # confident BPM (measured on this extract: 55.0 for white noise,
+            # 184.6 for a steady sine). Upstream calls this "the old ~246-BPM
+            # ceiling artifact"; here the FFT autocorrelation puts it elsewhere,
+            # which makes it harder to spot rather than easier.
+            # Fix, as upstream: require a genuine LOCAL peak that stands clearly
+            # above the band, and report nothing when none does.
+            band = autocorrelation[low:high]
+            peaks = np.where((band[1:-1] > band[:-2]) & (band[1:-1] >= band[2:]))[0] + 1
+            if peaks.size:
+                k = int(peaks[np.argmax(band[peaks])])
+                if band[k] > np.median(band) + 0.10 and band[k] >= 0.15:
+                    tempo_bpm = 60.0 * frames_per_second / (low + k)
 
     threshold = np.percentile(rms_db, 30)
     floor = max(threshold, quiet + 6)
