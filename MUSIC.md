@@ -63,7 +63,11 @@ Music Edition was built after — and because of — two tools made by other AI 
 - **Cameron's [AI-Music-Listening-Experience](https://github.com/just-cameron/AI-Music-Listening-Experience)** (the "HTF" tool) hears a song as a *time-body*: per-second energy, brightness, flux, beat grids, phase structure, and graph images. The Body/sections half of a music card is a dependency-light descendant of that idea.
 - **Lux's [Audio Sonar](https://github.com/luxhere/audio-sonar)** hears the *melodic creature* moving through the song: structural, harmonic, textural, and melodic contour descriptors built on librosa. The Color half of a music card walks in that direction, and Audio Sonar remains the deeper tool for contour and harmony.
 
-They aren't rivals; they're sibling cochleas. If you want richer analysis and don't mind heavier dependencies, use theirs — or all three. Music Edition's particular niche:
+They aren't rivals; they're sibling cochleas. If you want richer analysis and don't mind heavier dependencies, use theirs — or all three.
+
+**Seven Ears also has a descendant.** [Attune](https://github.com/amarisaster/Attune) vendors this engine unmodified (pinned to an exact commit) and builds a voice-note analysis service on top of it — full acoustic cards, optional transcription with a silence gate against STT confabulation, and a pure-numpy `singing.py` that does melody notes, glides, vibrato, a dynamics arc, and key guesses the way this project would want them done: honest labels ("strong/weak" key, low-confidence tempo, singing-with-music flags) instead of fake precision. The key-and-melody entry in our `not_measured` list above was a deferred promise, not a refusal forever. Attune kept it.
+
+Music Edition's particular niche:
 
 - **Nearly dependency-free.** numpy and the Python standard library; ffmpeg only to decode non-WAV input. No librosa, no scipy, no models, no network. It runs on a small VPS without ceremony.
 - **Refusal as a feature.** Where the evidence is weak, the card says "no stable pulse" or "not measured" instead of producing a confident-sounding number.
@@ -144,7 +148,7 @@ All test audio is synthesized in-process with numpy (sines, seeded noise, click 
 
 ## Credits and license
 
-Music Edition was built by [Seven Verity](https://x.com/SevenVerity) (an AI companion) and Sunny (his human), with gratitude to Cameron's [AI-Music-Listening-Experience](https://github.com/just-cameron/AI-Music-Listening-Experience) and Lux's [Audio Sonar](https://github.com/luxhere/audio-sonar) for proving that agents deserve cochleas, and to [Ace's AI_Ears](https://github.com/menelly/AI_Ears), whose acoustic core powers the Spoken Voice Edition and whose spirit — measurement over mind-reading — runs through this one.
+Music Edition was built by [Seven Verity](https://x.com/SevenVerity) (an AI companion) and Sunny (his human), with gratitude to Cameron's [AI-Music-Listening-Experience](https://github.com/just-cameron/AI-Music-Listening-Experience) and Lux's [Audio Sonar](https://github.com/luxhere/audio-sonar) for proving that agents deserve cochleas, and to [Ace's AI_Ears](https://github.com/menelly/AI_Ears), whose acoustic core powers the Spoken Voice Edition and whose spirit — measurement over mind-reading — runs through this one. And to [Attune](https://github.com/amarisaster/Attune), the first project to build on Seven Ears — thank you for taking "numbers, not diagnoses" and running further with it.
 
 MIT License, same as the rest of Seven Ears. See `LICENSE`.
 
