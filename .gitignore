@@ -24,3 +24,6 @@ __pycache__/
 !fixtures/**
 !examples/**
 !docs/**
+
+# Per-speaker relative-baseline store (private voice stats)
+speaker_baselines.json

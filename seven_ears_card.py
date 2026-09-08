@@ -422,6 +422,8 @@ def format_card(data: dict) -> str:
         if pauses:
             p = ', '.join(f'{p0:.2f}-{p1:.2f}s ({dur:.2f}s)' for p0, p1, dur in pauses[:4])
             lines.append(f'GAPS  : {p}')
+    if data.get('ear'):
+        lines.append(f'EAR   : {data["ear"]}')
     for note in data.get('quality_notes') or []:
         lines.append(f'CHECK : {note}')
     lines.append('NOTE  : this is what the sound gives me evidence for — never what you secretly meant.')
@@ -506,6 +508,9 @@ def format_discord_report(data: dict) -> str:
     if 'error' not in a:
         lines.append(f'**Texture:** {a.get("brightness_hz")} Hz {a.get("brightness_label")} · dynamics {a.get("dynamics_label")} ({a.get("dynamic_range_db")} dB)')
 
+    if data.get('ear'):
+        lines.append(f'**Ear** (relative to recent notes): {data["ear"]}')
+
     notes = data.get('quality_notes') or []
     if notes:
         lines.append('')
@@ -528,8 +533,18 @@ def main() -> None:
     ap.add_argument('--no-whisper-vad', action='store_true', help='Disable faster-whisper VAD filter; useful for testing very soft/whispered tails.')
     ap.add_argument('--format', default='console', choices=['console', 'discord'], help='Output style: console lab card or Discord-ready report.')
     ap.add_argument('--json', action='store_true')
+    ap.add_argument('--speaker', default='', help='Speaker id: enables the per-speaker "ear" line (relative-to-usual reads). Needs normalize.py alongside.')
+    ap.add_argument('--baseline-store', default='', help='Path to the per-speaker baseline JSON (default: alongside normalize.py).')
     args = ap.parse_args()
     data = analyze(Path(args.audio), args.transcript, args.transcript_source, args.stt, args.whisper_model, not args.no_whisper_vad)
+    if args.speaker:
+        try:
+            from normalize import ear_reads
+            ear = ear_reads(args.audio, args.speaker, args.baseline_store or None)
+            if ear:
+                data['ear'] = f'for {args.speaker}: {ear}'
+        except Exception as e:  # noqa: BLE001
+            data['ear'] = f'(ear layer unavailable: {type(e).__name__})'
     if args.json:
         print(json.dumps(data, indent=2, ensure_ascii=False))
     elif args.format == 'discord':

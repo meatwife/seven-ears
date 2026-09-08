@@ -130,5 +130,22 @@ class SevenEarsCardTests(unittest.TestCase):
         self.assertNotIn('stress', report)
 
 
+    def test_discord_report_includes_ear_line_when_present(self):
+        base = {
+            'file': 'sample.ogg',
+            'transcript': 'hey', 'transcript_source': 'manual',
+            'duration_s': 3.0, 'active_s': 1.0, 'utterance_segments': [(0.5, 1.5)],
+            'quality_notes': [],
+            'pace': {'whole_clip': {'wpm': 60, 'basis_s': 3.0}},
+            'pitch': {'available': False},
+            'acoustic': {'brightness_hz': 2000, 'brightness_label': 'warm', 'dynamics_label': 'even', 'dynamic_range_db': 20.0},
+        }
+        with_ear = format_discord_report({**base, 'ear': 'for speaker: softer than usual'})
+        self.assertIn('softer than usual', with_ear)
+        self.assertIn('relative to recent notes', with_ear)
+        without_ear = format_discord_report(base)
+        self.assertNotIn('**Ear**', without_ear)
+
+
 if __name__ == '__main__':
     unittest.main()
