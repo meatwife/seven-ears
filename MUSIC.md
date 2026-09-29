@@ -153,3 +153,10 @@ Music Edition was built by [Seven Verity](https://x.com/SevenVerity) (an AI comp
 MIT License, same as the rest of Seven Ears. See `LICENSE`.
 
 Listen carefully. Let the person tell you what the song meant.
+
+## First Listen (local prototype)
+
+For a sequential encounter before the whole-song map, see
+[First Listen](docs/FIRST_LISTEN.md). It reveals passage-local measurements,
+keeps an immutable listening journal, and supports restart-safe replay. This
+experimental companion mode leaves the ordinary music card unchanged.
