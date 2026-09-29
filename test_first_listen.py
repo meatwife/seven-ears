@@ -36,6 +36,13 @@ class FirstListenTests(unittest.TestCase):
         self.assertNotIn('metadata', a)
         self.assertNotIn('total', a)
 
+    def test_card_exposes_existing_passage_detail(self):
+        self.prepare(tone(5))
+        card = fl.next_passage(self.path)['card']
+        self.assertIn('Band balance: low ', card)
+        self.assertIn('Dynamics:', card)
+        self.assertIn('Activity:', card)
+
     def test_restart_replays_and_note_retry_does_not_skip(self):
         self.prepare()
         first = fl.next_passage(self.path)

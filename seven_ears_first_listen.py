@@ -39,6 +39,46 @@ def measure(x, sr):
     return result
 
 
+def format_passage_card(packet):
+    start, end = packet['start_s'], packet['end_s']
+    motion, evidence = packet['motion'], packet['measurements']
+    lines = [f'Passage {start:.2f}–{end:.2f}s. Measurements use only this passage.']
+    for point in motion:
+        brightness = (f"centroid ~{point['centroid_hz']} Hz" if point['centroid_hz'] is not None
+                      else 'no measurable spectral color')
+        lines.append(f"{point['start_s']:.2f}–{point['end_s']:.2f}s: "
+                     f"RMS {point['rms_dbfs']} dBFS; {brightness}.")
+    color = evidence.get('color', {})
+    if color.get('available'):
+        lines.append(f"Texture: {color['brightness_label']}; {color['tonality_label']}.")
+        bands = color.get('band_balance', {})
+        if bands:
+            lines.append(
+                'Band balance: '
+                f"low {bands.get('low_pct')}%, mid {bands.get('mid_pct')}%, "
+                f"upper-mid {bands.get('upper_mid_pct')}%, high {bands.get('high_pct')}%."
+            )
+    dynamics = evidence.get('dynamics', {})
+    if dynamics.get('available'):
+        lines.append(
+            f"Dynamics: {dynamics['label']}; {dynamics['loudness_spread_db']} dB local spread; "
+            f"peak {dynamics['peak_dbfs']} dBFS."
+        )
+    pulse = evidence.get('pulse', {})
+    if pulse:
+        lines.append(
+            f"Activity: {pulse.get('onset_count', 0)} detected onsets "
+            f"({pulse.get('onset_density_per_s', 0.0)}/s)."
+        )
+    tempo = pulse.get('tempo', {})
+    if tempo.get('supported'):
+        lines.append(f"Local pulse estimate ~{tempo['bpm']} BPM; half/double ambiguity possible.")
+    else:
+        lines.append('No supported local tempo estimate.')
+    lines.append('Write your own impression, uncertainty or anticipation; no required emotion.')
+    return '\n'.join(lines)
+
+
 def passage(x, sr, start):
     evidence = measure(x, sr)
     motion = []
@@ -53,24 +93,10 @@ def passage(x, sr, start):
                        'rms_dbfs': round(20 * math.log10(max(rms, 1e-9)), 1),
                        'centroid_hz': color.get('centroid_median_hz')})
     end = start + len(x) / sr
-    lines = [f'Passage {start:.2f}–{end:.2f}s. Measurements use only this passage.']
-    for point in motion:
-        brightness = (f"centroid ~{point['centroid_hz']} Hz" if point['centroid_hz'] is not None
-                      else 'no measurable spectral color')
-        lines.append(f"{point['start_s']:.2f}–{point['end_s']:.2f}s: "
-                     f"RMS {point['rms_dbfs']} dBFS; {brightness}.")
-    color = evidence.get('color', {})
-    if color.get('available'):
-        lines.append(f"Texture: {color['brightness_label']}; {color['tonality_label']}.")
-    pulse = evidence.get('pulse', {})
-    tempo = pulse.get('tempo', {})
-    if tempo.get('supported'):
-        lines.append(f"Local pulse estimate ~{tempo['bpm']} BPM; half/double ambiguity possible.")
-    else:
-        lines.append('No supported local tempo estimate.')
-    lines.append('Write your own impression, uncertainty or anticipation; no required emotion.')
-    return {'start_s': round(start, 4), 'end_s': round(end, 4),
-            'card': '\n'.join(lines), 'motion': motion, 'measurements': evidence}
+    packet = {'start_s': round(start, 4), 'end_s': round(end, 4),
+              'motion': motion, 'measurements': evidence}
+    packet['card'] = format_passage_card(packet)
+    return packet
 
 
 def prepare_signal(x, sr, destination, seconds=20.0, metadata=None):

@@ -53,7 +53,9 @@ python seven_ears_first_listen.py journal /private/listen.sqlite
 ```
 
 All outputs are JSON. A packet has a readable `card`, five-second `motion` and
-raw `measurements`; only the current passage is present. Times in `motion` are
+raw `measurements`; only the current passage is present. The card surfaces the
+passage's band balance, local dynamic spread and detected-onset activity rather
+than leaving those measurements buried in JSON. Times in `motion` are
 recording-relative. Section/silence timestamps inside `measurements` are relative
 to that passage. Local tempo may differ from whole-song tempo and retains
 half/double ambiguity. Spectral centroid is a power-weighted measurement, not an
