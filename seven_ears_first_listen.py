@@ -99,7 +99,64 @@ def passage(x, sr, start):
     return packet
 
 
-def prepare_signal(x, sr, destination, seconds=20.0, metadata=None):
+def boundary_feature(x, sr):
+    """Small causal summary for deciding whether an encountered block closes a passage."""
+    rms = float(np.sqrt(np.mean(x * x)))
+    measured = measure(x, sr)
+    color = measured.get('color', {})
+    return {
+        'rms_dbfs': 20 * math.log10(max(rms, 1e-9)),
+        'centroid_hz': color.get('centroid_median_hz'),
+        'bands': color.get('band_balance'),
+        'onset_density': measured.get('pulse', {}).get('onset_density_per_s', 0.0),
+    }
+
+
+def boundary_changed(before, after):
+    level_delta = abs(after['rms_dbfs'] - before['rms_dbfs'])
+    # A fade already below this floor has no useful new body to begin; keep the
+    # tail with the passage instead of manufacturing a subsecond corpse packet.
+    if after['rms_dbfs'] <= -50 and after['rms_dbfs'] < before['rms_dbfs']:
+        return False
+    if before['centroid_hz'] and after['centroid_hz']:
+        octave_delta = abs(math.log2(after['centroid_hz'] / before['centroid_hz']))
+    else:
+        octave_delta = 0.0
+    if before['bands'] and after['bands']:
+        names = ('low_pct', 'mid_pct', 'upper_mid_pct', 'high_pct')
+        band_delta = sum(abs(after['bands'][name] - before['bands'][name]) for name in names)
+    else:
+        band_delta = 0.0
+    activity_delta = abs(after['onset_density'] - before['onset_density'])
+    major = level_delta >= 7 or octave_delta >= 1.0 or band_delta >= 55 or activity_delta >= 1.7
+    moderate = sum((level_delta >= 5, octave_delta >= 0.6,
+                    band_delta >= 30, activity_delta >= 1.0))
+    return major or moderate >= 2
+
+
+def adaptive_ranges(x, sr, minimum_s=15.0, maximum_s=30.0, probe_s=5.0):
+    """Choose passage ends after changes are encountered, never by looking ahead."""
+    minimum = round(minimum_s * sr)
+    maximum = round(maximum_s * sr)
+    probe = round(probe_s * sr)
+    ranges = []
+    start = 0
+    while start < len(x):
+        hard_end = min(len(x), start + maximum)
+        end = min(hard_end, start + minimum)
+        while end < hard_end:
+            candidate = min(hard_end, end + probe)
+            before = boundary_feature(x[max(start, candidate - 2 * probe):candidate - probe], sr)
+            after = boundary_feature(x[candidate - probe:candidate], sr)
+            end = candidate
+            if boundary_changed(before, after):
+                break
+        ranges.append((start, end))
+        start = end
+    return ranges
+
+
+def prepare_signal(x, sr, destination, seconds=20.0, metadata=None, adaptive=False):
     if not isinstance(sr, int) or sr <= 0:
         raise ListenError('sample rate must be a positive integer')
     x = np.asarray(x, dtype=np.float64)
@@ -110,9 +167,15 @@ def prepare_signal(x, sr, destination, seconds=20.0, metadata=None):
     destination = Path(destination)
     if destination.exists():
         raise ListenError('session already exists; use next to resume')
-    step = round(seconds * sr)
-    packets = [passage(x[i:i + step], sr, i / sr) for i in range(0, len(x), step)]
+    if adaptive:
+        ranges = adaptive_ranges(x, sr)
+    else:
+        step = round(seconds * sr)
+        ranges = [(i, min(len(x), i + step)) for i in range(0, len(x), step)]
+    packets = [passage(x[start:end], sr, start / sr) for start, end in ranges]
     whole = measure(x, sr)
+    session_metadata = dict(metadata or {})
+    session_metadata['passage_mode'] = 'adaptive-15-30-causal' if adaptive else f'fixed-{seconds:g}s'
     # Build completely off-path, then publish without clobbering an existing
     # session. A crash during preparation cannot expose a half-written session.
     fd, temp = tempfile.mkstemp(prefix='.first-listen-', dir=destination.parent)
@@ -126,7 +189,7 @@ def prepare_signal(x, sr, destination, seconds=20.0, metadata=None):
                     note TEXT, noted_at TEXT);
             ''')
             db.execute('INSERT INTO session VALUES (1, ?, ?)',
-                       (encode(whole), encode(metadata or {})))
+                       (encode(whole), encode(session_metadata)))
             for i, packet in enumerate(packets, 1):
                 payload = encode(packet)
                 token = hashlib.sha256((str(i) + payload).encode()).hexdigest()
@@ -222,6 +285,8 @@ def main():
     prep.add_argument('audio', type=Path)
     prep.add_argument('session', type=Path)
     prep.add_argument('--seconds', type=float, default=20)
+    prep.add_argument('--adaptive', action='store_true',
+                      help='causal 15–30s passages; closes only after an encountered change')
     for command in ['next', 'note', 'finish', 'journal']:
         sub = commands.add_parser(command)
         sub.add_argument('session', type=Path)
@@ -233,7 +298,7 @@ def main():
         if args.command == 'prepare':
             x, sr = load_audio(args.audio)
             result = prepare_signal(x, sr, args.session, args.seconds,
-                                    {'source_name': args.audio.name})
+                                    {'source_name': args.audio.name}, adaptive=args.adaptive)
         elif args.command == 'next':
             result = next_passage(args.session)
         elif args.command == 'note':

@@ -43,6 +43,8 @@ outside the source repository, in a private directory (especially journals).
 
 ```sh
 python seven_ears_first_listen.py prepare /path/to/audio.mp3 /private/listen.sqlite
+# Or compare causal adaptive passages (15–30 seconds):
+python seven_ears_first_listen.py prepare /path/to/audio.mp3 /private/adaptive.sqlite --adaptive
 python seven_ears_first_listen.py next /private/listen.sqlite
 # Write your impression in a private UTF-8 file; use token from the packet.
 python seven_ears_first_listen.py note /private/listen.sqlite --token TOKEN --note-file /private/impression.txt
@@ -61,6 +63,14 @@ to that passage. Local tempo may differ from whole-song tempo and retains
 half/double ambiguity. Spectral centroid is a power-weighted measurement, not an
 instrument or emotion classifier. Very short or digital-silence passages carry
 no unsupported texture/pulse claim. Fixed boundaries can split musical phrases.
+
+Adaptive mode examines five-second blocks inside the current passage after a
+15-second minimum. A sufficiently large multi-feature change closes the passage
+at the end of the block in which the change was encountered; it never moves the
+boundary backward to announce an event before revealing it. With no qualifying
+change, the passage closes at 30 seconds. This is causal boundary selection over
+decoded PCM, not musical-phrase recognition; fixed 20-second mode remains the
+baseline and default.
 
 `prepare` prints no title or duration, but the calling agent may already know the
 input filename or conversation context. The short final window reveals that it

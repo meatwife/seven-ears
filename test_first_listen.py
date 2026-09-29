@@ -43,6 +43,40 @@ class FirstListenTests(unittest.TestCase):
         self.assertIn('Dynamics:', card)
         self.assertIn('Activity:', card)
 
+    def test_adaptive_holds_steady_audio_to_maximum(self):
+        fl.prepare_signal(tone(65), SR, self.path, adaptive=True)
+        first = fl.next_passage(self.path)
+        self.assertEqual((first['start_s'], first['end_s']), (0.0, 30.0))
+        while not fl.next_passage(self.path).get('complete'):
+            packet = fl.next_passage(self.path)
+            fl.save_note(self.path, packet['token'], 'Observed.')
+        self.assertEqual(fl.finish(self.path)['metadata']['passage_mode'],
+                         'adaptive-15-30-causal')
+
+    def test_adaptive_closes_after_encountered_change(self):
+        x = np.concatenate([tone(15, 220, 0.02), tone(25, 880, 0.2)])
+        fl.prepare_signal(x, SR, self.path, adaptive=True)
+        first = fl.next_passage(self.path)
+        self.assertEqual((first['start_s'], first['end_s']), (0.0, 20.0))
+
+    def test_adaptive_keeps_near_silent_fade_with_passage(self):
+        x = np.concatenate([tone(25, amp=0.1), tone(5, amp=0.0001)])
+        fl.prepare_signal(x, SR, self.path, adaptive=True)
+        first = fl.next_passage(self.path)
+        self.assertEqual((first['start_s'], first['end_s']), (0.0, 30.0))
+
+    def test_adaptive_boundary_does_not_depend_on_later_audio(self):
+        prefix = tone(30)
+        self.prepare(np.concatenate([prefix, tone(30, 330, 0.01)]))
+        fixed = fl.next_passage(self.path)
+        other = Path(self.tmp.name) / 'adaptive.sqlite'
+        fl.prepare_signal(np.concatenate([prefix, tone(30, 990, 0.8)]), SR,
+                          other, adaptive=True)
+        adaptive = fl.next_passage(other)
+        self.assertEqual(adaptive['end_s'], 30.0)
+        self.assertEqual(adaptive['measurements'], fl.measure(prefix, SR))
+        self.assertEqual(fixed['start_s'], adaptive['start_s'])
+
     def test_restart_replays_and_note_retry_does_not_skip(self):
         self.prepare()
         first = fl.next_passage(self.path)
