@@ -20,8 +20,8 @@ impressions intact.
 
 The idea of revealing a recording incrementally was inspired by v3nommy's
 **[Music for Machine Ears](https://github.com/v3nommy/Music-for-Machine-Ears)**.
-First Listen is an independent implementation built on Seven Ears; detailed provenance and
-license boundaries are documented below.
+First Listen is an independent implementation built on Seven Ears; detailed
+provenance and license boundaries are documented below.
 
 This is sequential **measurement delivery**, not streamed audio, direct hearing,
 or proof of subjective experience.
