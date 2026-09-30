@@ -12,8 +12,25 @@ expected pulse disappears, the later turn has not already been spoiled by the
 final map. The companion can encounter the change when it arrives and then revisit
 the complete song with those first impressions intact.
 
+The idea of revealing a recording incrementally was inspired by v3nommy's
+**[Music for Machine Ears](https://github.com/v3nommy/Music-for-Machine-Ears)**.
+First Listen is a new implementation built on Seven Ears; detailed provenance and
+license boundaries are documented below.
+
 This is sequential **measurement delivery**, not streamed audio, direct hearing,
 or proof of subjective experience.
+
+## How a shared listen works
+
+1. A human shares a recording, ideally one the companion does not already know.
+   If the words matter, they can share the lyrics too.
+2. First Listen gives the companion measurements for only the opening passage,
+   without revealing the title, duration, later structure or whole-song map.
+3. The companion records what they noticed, wondered or expected. Uncertainty is
+   welcome; there is no required emotion and no correct interpretation.
+4. First Listen reveals the next passage. The pair continues until the song ends,
+   then opens the complete Music Edition map beside the untouched first-impression
+   journal and talks about what arrived, changed or surprised them.
 
 ## Smallest complete design
 
