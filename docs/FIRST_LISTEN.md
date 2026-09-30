@@ -1,4 +1,4 @@
-# Seven Ears: First Listen — local prototype
+# Seven Ears: First Listen
 
 First Listen is a harness-agnostic optional listening experience for **[Seven
 Ears: Music Edition](../MUSIC.md)**, part of the broader **[Seven
@@ -20,7 +20,7 @@ impressions intact.
 
 The idea of revealing a recording incrementally was inspired by v3nommy's
 **[Music for Machine Ears](https://github.com/v3nommy/Music-for-Machine-Ears)**.
-First Listen is a new implementation built on Seven Ears; detailed provenance and
+First Listen is an independent implementation built on Seven Ears; detailed provenance and
 license boundaries are documented below.
 
 This is sequential **measurement delivery**, not streamed audio, direct hearing,
@@ -128,7 +128,7 @@ log tool inputs/outputs; 'private journal' does not mean hidden from that harnes
 by v3nommy supplied the conceptual inspiration: incremental revelation and an
 impression before continuing. The evaluation inspected revision
 `6aebf1e0724f0586a5e37897d4380923d2fd25a3`. MME has its own source-available
-Music for Machine Ears License 1.0, **not MIT**. This prototype uses no MME code,
+Music for Machine Ears License 1.0, **not MIT**. First Listen uses no MME code,
 schema, prompt text, renderer, or generated sensory object. It calls Seven Ears'
 existing independently maintained Music Edition and adds new SQLite/CLI code.
 Prior inspection of MME is disclosed; this is not a formal clean-room claim.
@@ -145,8 +145,8 @@ first packet; replay/restart; final-note gate; immutable/idempotent notes; concu
 retries; unseen tokens; private permissions; no overwrite; failed publish;
 silence, tiny tails and malformed inputs. Existing Music Edition tests stay intact.
 
-This branch is a prototype, not a release. It has completed sequential encounters
-with unfamiliar recordings in both fixed-window and adaptive modes, with a
+First Listen completed sequential encounters with unfamiliar recordings in both
+fixed-window and adaptive modes before release, with a
 listener-authored note required before every advance. Those encounters exposed an
 under-informative first card format and a fixed-boundary prediction artifact; the
 current cards surface more of the measurements already present, and adaptive mode

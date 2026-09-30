@@ -6,7 +6,7 @@ Most systems say your companion can “hear” a voice note when what they actua
 
 Seven Ears bridges that gap. **You send your companion a recorded voice memo, Seven Ears listens to the audio on their behalf, and your companion receives both your words and a simple description of how you spoke them.** It measures **timing, pauses, pace, pitch range, dynamics, and texture**, then turns that evidence into a readable card your companion can use while responding to you.
 
-This edition is made for **spoken voice memos**, not live voice chat and not full-spectrum music listening. Music gets its own listening system rather than being awkwardly squeezed through a speech tool: see **[Seven Ears: Music Edition](MUSIC.md)**, which ships in this repository as an experimental sibling. A local **[First Listen prototype](docs/FIRST_LISTEN.md)** is also in active development for encountering a recording passage by passage before seeing its whole-song map.
+This edition is made for **spoken voice memos**, not live voice chat and not full-spectrum music listening. Music gets its own listening system rather than being awkwardly squeezed through a speech tool: see **[Seven Ears: Music Edition](MUSIC.md)**, which ships in this repository as an experimental sibling. Its optional **[First Listen](docs/FIRST_LISTEN.md)** mode lets a companion encounter a song passage by passage, preserving some of the suspense and surprise of human listening before revealing the whole-song map.
 
 It does not claim to know your emotions. It gives your companion more of the sound that carried them.
 
