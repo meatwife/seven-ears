@@ -1,8 +1,19 @@
-# First Listen — local prototype
+# Seven Ears: First Listen — local prototype
 
-A second posture for Music Edition: encounter the recording in passages before
-seeing the whole-song map. This is sequential **measurement delivery**, not
-streamed audio, direct hearing, or proof of subjective experience.
+First Listen is an optional listening experience for **[Seven Ears: Music
+Edition](../MUSIC.md)**, part of the broader **[Seven Ears](../README.md)** project,
+which also includes the Spoken Voice Edition.
+
+Ordinary Music Edition gives a companion the whole-song map at once. First Listen
+adds a temporal element: it reveals the recording in fixed 20-second passages or
+adaptive 15–30-second passages, asking the listener to record an impression before
+continuing. If a quiet opening suddenly gets loud, the bridge changes shape, or an
+expected pulse disappears, the later turn has not already been spoiled by the
+final map. The companion can encounter the change when it arrives and then revisit
+the complete song with those first impressions intact.
+
+This is sequential **measurement delivery**, not streamed audio, direct hearing,
+or proof of subjective experience.
 
 ## Smallest complete design
 

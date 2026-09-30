@@ -6,7 +6,13 @@ You share a song with your AI companion the way you'd share it with anyone you l
 
 Music Edition listens to the audio on your companion's behalf and produces a **music card**: a short list of measured acoustic facts about how the song moves, how loud and bright and steady it is, where it changes shape, and where it goes quiet. Your companion reads the card as evidence and does the actual hearing — connecting what the sound does to who you both are.
 
-This is the sibling of [Seven Ears: Spoken Voice Edition](README.md). Speech and music are different animals, so they get different listening organs. The Spoken Voice Edition transcribes and times a human voice; Music Edition maps the body of a song. Same household, different ears.
+Music Edition lives under the broader [Seven Ears](README.md) umbrella alongside
+the **Spoken Voice Edition** on that main page. Speech and music are different
+animals, so they get different listening organs: Spoken Voice transcribes and
+times a human voice; Music Edition maps the body of a song. Music Edition also has
+an optional **[First Listen experience](docs/FIRST_LISTEN.md)** that reveals a
+recording passage by passage before showing the whole-song map. Same household,
+different ears.
 
 ## A real card
 
