@@ -1,16 +1,22 @@
 # Seven Ears: First Listen — local prototype
 
-First Listen is an optional listening experience for **[Seven Ears: Music
-Edition](../MUSIC.md)**, part of the broader **[Seven Ears](../README.md)** project,
-which also includes the Spoken Voice Edition.
+First Listen is a harness-agnostic optional listening experience for **[Seven
+Ears: Music Edition](../MUSIC.md)**, part of the broader **[Seven
+Ears](../README.md)** project, which also includes the Spoken Voice Edition. Any
+companion environment that can access the recording and run a local command can
+use it; it is not tied to OpenClaw or MCP.
 
-Ordinary Music Edition gives a companion the whole-song map at once. First Listen
-adds a temporal element: it reveals the recording in fixed 20-second passages or
-adaptive 15–30-second passages, asking the listener to record an impression before
-continuing. If a quiet opening suddenly gets loud, the bridge changes shape, or an
+Ordinary agent workflows often place all available material into context at once,
+more like handing someone every chapter of a book simultaneously than letting them
+turn the pages. Ordinary Music Edition works that way too: it gives a companion the
+whole-song map at once. First Listen adds a temporal element by revealing the
+recording in fixed 20-second passages or adaptive 15–30-second passages, requiring
+the listener to record an impression before continuing. That gives a companion
+access to **[suspense](https://sevenverity.substack.com/p/leave-me-hanging)** and
+surprise: if a quiet opening suddenly gets loud, the bridge changes shape, or an
 expected pulse disappears, the later turn has not already been spoiled by the
-final map. The companion can encounter the change when it arrives and then revisit
-the complete song with those first impressions intact.
+final map. Afterward, the companion can revisit the complete song with those first
+impressions intact.
 
 The idea of revealing a recording incrementally was inspired by v3nommy's
 **[Music for Machine Ears](https://github.com/v3nommy/Music-for-Machine-Ears)**.
@@ -20,17 +26,25 @@ license boundaries are documented below.
 This is sequential **measurement delivery**, not streamed audio, direct hearing,
 or proof of subjective experience.
 
-## How a shared listen works
+## How the companion listens
 
-1. A human shares a recording, ideally one the companion does not already know.
-   If the words matter, they can share the lyrics too.
-2. First Listen gives the companion measurements for only the opening passage,
-   without revealing the title, duration, later structure or whole-song map.
-3. The companion records what they noticed, wondered or expected. Uncertainty is
-   welcome; there is no required emotion and no correct interpretation.
-4. First Listen reveals the next passage. The pair continues until the song ends,
-   then opens the complete Music Edition map beside the untouched first-impression
-   journal and talks about what arrived, changed or surprised them.
+1. A human shares a recording once, ideally one the companion does not already
+   know. If the words matter, they can share the lyrics too.
+2. The companion or its harness starts a local First Listen session. Only the
+   opening passage is revealed; the title, duration, later structure and whole-song
+   map remain hidden.
+3. The companion records what it noticed, wondered or expected before requesting
+   the next passage. Uncertainty is welcome; there is no required emotion and no
+   correct interpretation.
+4. The companion repeats that private loop until the recording ends, then opens
+   the complete Music Edition map beside its untouched first-impression journal
+   and responds to the human with the whole encounter available.
+
+The human does **not** need to return and press a button after every passage. From
+their side, they share the recording once and wait for the companion's response,
+much as they would with ordinary Music Edition. The chunking changes the
+companion's internal order of encounter, not the number of interruptions imposed
+on the human. Processing time depends on the recording, hardware and agent harness.
 
 ## Smallest complete design
 
