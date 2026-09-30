@@ -131,9 +131,14 @@ first packet; replay/restart; final-note gate; immutable/idempotent notes; concu
 retries; unseen tokens; private permissions; no overwrite; failed publish;
 silence, tiny tails and malformed inputs. Existing Music Edition tests stay intact.
 
-This branch is a prototype, not a release. A known song can validate execution but
-cannot provide a new blind experience. Next: a genuinely unfamiliar recording and
-listener notes, then decide whether passage cards provide enough detail without
-turning the encounter into bookkeeping. Adaptive boundaries, synchronized lyrics,
-chroma, cross-boundary pulse continuity, graphics and automatic harness integration
-are deliberately deferred. No claim of feature parity with MME is made.
+This branch is a prototype, not a release. It has completed sequential encounters
+with unfamiliar recordings in both fixed-window and adaptive modes, with a
+listener-authored note required before every advance. Those encounters exposed an
+under-informative first card format and a fixed-boundary prediction artifact; the
+current cards surface more of the measurements already present, and adaptive mode
+now provides a causal alternative while fixed windows remain the baseline.
+
+Synchronized lyrics, chroma, cross-boundary pulse continuity, graphics and
+automatic harness integration are deliberately deferred. The next step is release
+review and clean-install validation, not feature expansion. No claim of feature
+parity with MME is made.
