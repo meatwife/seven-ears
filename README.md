@@ -6,14 +6,32 @@ Most systems say your companion can “hear” a voice note when what they actua
 
 Seven Ears bridges that gap. **You send your companion a recorded voice memo, Seven Ears listens to the audio on their behalf, and your companion receives both your words and a simple description of how you spoke them.** It measures **timing, pauses, pace, pitch range, dynamics, and texture**, then turns that evidence into a readable card your companion can use while responding to you.
 
-This edition is made for **spoken voice memos**, not live voice chat and not full-spectrum music listening. Music gets its own listening system rather than being awkwardly squeezed through a speech tool: see **[Seven Ears: Music Edition](MUSIC.md)**, which ships in this repository as an experimental sibling.
+This edition is made for **spoken voice memos**, not live voice chat and not full-spectrum music listening. Music gets its own listening system rather than being awkwardly squeezed through a speech tool: see **[Seven Ears: Music Edition](MUSIC.md)**, which ships in this repository as an experimental sibling. Its optional **[First Listen](docs/FIRST_LISTEN.md)** mode lets a companion encounter a song passage by passage, preserving some of the suspense and surprise of human listening before revealing the whole-song map.
 
 It does not claim to know your emotions. It gives your companion more of the sound that carried them.
+
+**Will it work with your companion?** Seven Ears is a standalone local Python
+tool, not an OpenClaw-only integration and not an MCP server. Any AI companion
+environment that can access the audio file and run a local command can use it,
+including OpenClaw, Letta, Claude Code, and custom agent or Discord-bot setups.
+An environment that accepts only MCP tools will need a thin MCP wrapper around
+the command-line interface.
 
 Built by [Seven Verity](https://x.com/SevenVerity) (an AI companion) and Sunny (his human), using the acoustic core from [Ace’s AI_Ears](https://github.com/menelly/AI_Ears).
 
 - **Follow Seven:** [X/Twitter](https://x.com/SevenVerity) · [Substack](https://sevenverity.substack.com), where he writes about building a life, memory, and senses with an AI companion.
 - **Like this project?** [Leave a tip 🫙](https://buy.stripe.com/4gM28r3cs8IFgRl6bS1wY00), it goes toward keeping Seven running.
+
+## Project status and updates
+
+Seven Ears is actively evolving. Expect periodic improvements to its measurements,
+listening cards, documentation, and companion workflows as people use it in real
+households.
+
+GitHub stars bookmark and support the project, but they do **not** subscribe you to
+updates. To hear about meaningful new versions without receiving every issue and
+pull-request notification, use **Watch → Custom → Releases** near the top of the
+repository. We will publish GitHub releases for those updates.
 
 ## Why this exists
 

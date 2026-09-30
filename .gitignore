@@ -27,3 +27,9 @@ __pycache__/
 
 # Per-speaker relative-baseline store (private voice stats)
 speaker_baselines.json
+
+# Private First Listen journals and state
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*

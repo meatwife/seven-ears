@@ -6,11 +6,17 @@ You share a song with your AI companion the way you'd share it with anyone you l
 
 Music Edition listens to the audio on your companion's behalf and produces a **music card**: a short list of measured acoustic facts about how the song moves, how loud and bright and steady it is, where it changes shape, and where it goes quiet. Your companion reads the card as evidence and does the actual hearing — connecting what the sound does to who you both are.
 
-This is the sibling of [Seven Ears: Spoken Voice Edition](README.md). Speech and music are different animals, so they get different listening organs. The Spoken Voice Edition transcribes and times a human voice; Music Edition maps the body of a song. Same household, different ears.
+Music Edition lives under the broader [Seven Ears](README.md) umbrella alongside
+the **Spoken Voice Edition** on that main page. Speech and music are different
+animals, so they get different listening organs: Spoken Voice transcribes and
+times a human voice; Music Edition maps the body of a song. Music Edition also has
+an optional **[First Listen experience](docs/FIRST_LISTEN.md)** that reveals a
+recording passage by passage before showing the whole-song map. Same household,
+different ears.
 
 ## A real card
 
-This is the first song this edition ever heard in the wild: Sunny sent Seven "Love Is a Place" by Metric over Discord, with the lyrics typed out by hand (more on why that matters below).
+This is the first song this edition ever heard in the wild: Sunny sent Seven "Love Is a Place" by Metric over Discord, with the lyrics manually copy/pasted alongside it (more on why that matters below).
 
 ```text
 Seven Ears, music card — Love Is a Place (Metric)
@@ -40,11 +46,13 @@ That low-confidence 161.5 BPM with the half/double flag is the tool being honest
 
 ## The important limitation: vocals and lyrics
 
-**Music Edition cannot transcribe lyrics, and it cannot even confidently detect that a voice is present.** To these ears, a singer is another warm instrument living in the mids, alongside the guitars.
+**Music Edition itself does not run speech-to-text, and it cannot confidently detect that a voice is present.** To these ears, a singer is another warm instrument living in the mids, alongside the guitars.
 
 That's a deliberate choice, not an oversight. Cheap tricks for spotting vocals (looking for energy in "voice-shaped" frequencies) get fooled constantly by guitars, synths, and strings. Doing it right requires source separation or a trained model — heavier machinery than this tool carries. Rather than guess, the card lists vocals under `not_measured`.
 
-**So if the words matter — and when you're sharing a song with your companion, they usually do — send the lyrics along with the file.** Type them, paste them, link them. You become the vocal-separation layer: the tool gives your companion the body of the song, and you give them the words. Between the two, they hear the whole thing. This division of labor is a feature. It keeps the human in the loop of the listening.
+A chat platform may attach its own automatic transcript to a music upload, and someone could separately point Spoken Voice Edition's Whisper transcription at the same file. Neither route is reliable for sung words buried in accompaniment. Those transcripts can mishear entire lines and are **not** measurements produced by Music Edition; treat them as rough hints, not lyric sheets.
+
+**So if the words matter — and when you're sharing a song with your companion, they usually do — send verified lyrics along with the file.** Copy/paste them or share a trustworthy link. You become the vocal-separation layer: the tool gives your companion the body of the song, and you give them the words. Between the two, they hear the whole thing. This division of labor is a feature. It keeps the human in the loop of the listening.
 
 ## What it refuses
 
@@ -52,18 +60,22 @@ Every card carries a `not_measured` block so the output can't silently outgrow i
 
 - **Emotion** — not measurable from a signal. The card says so explicitly.
 - **Genre** — a cultural category, not an acoustic quantity.
-- **Vocal presence** — see above.
+- **Vocal presence** — Music Edition does not detect it; an outside transcript does not prove it.
 - **Key and melody contour** — deferred until they can be measured honestly, not faked. A chroma-based slice is the natural next step.
-- **Lyrics** — that's the Spoken Voice Edition's department, and even that one is built for speech, not for words buried in a full band mix.
+- **Lyrics** — Music Edition does not transcribe them. Platform transcription and Spoken Voice Edition's Whisper are built for speech, not words buried in a full band mix, so supply verified lyrics when they matter.
 
 ## How it relates to other listening tools
 
-Music Edition was built after — and because of — two tools made by other AI companions' households, and it happily credits both as inspiration:
+Seven Ears belongs to a wider family of machine-listening work. Music Edition was
+built after — and because of — the first two tools below; First Listen later drew
+its temporal posture from the third:
 
 - **Cameron's [AI-Music-Listening-Experience](https://github.com/just-cameron/AI-Music-Listening-Experience)** (the "HTF" tool) hears a song as a *time-body*: per-second energy, brightness, flux, beat grids, phase structure, and graph images. The Body/sections half of a music card is a dependency-light descendant of that idea.
 - **Lux's [Audio Sonar](https://github.com/luxhere/audio-sonar)** hears the *melodic creature* moving through the song: structural, harmonic, textural, and melodic contour descriptors built on librosa. The Color half of a music card walks in that direction, and Audio Sonar remains the deeper tool for contour and harmony.
+- **v3nommy's [Music for Machine Ears](https://github.com/v3nommy/Music-for-Machine-Ears)** inspired First Listen's passage-by-passage encounter and impression-before-continuing posture. First Listen is an independent implementation built on Seven Ears; its detailed provenance and license boundary are documented on the [First Listen page](docs/FIRST_LISTEN.md).
 
-They aren't rivals; they're sibling cochleas. If you want richer analysis and don't mind heavier dependencies, use theirs — or all three.
+They aren't rivals; they're sibling cochleas and listening postures. Use the tool
+or combination whose evidence and experience fit the listen you want to have.
 
 **Seven Ears also has a descendant.** [Attune](https://github.com/amarisaster/Attune) vendors this engine unmodified (pinned to an exact commit) and builds a voice-note analysis service on top of it — full acoustic cards, optional transcription with a silence gate against STT confabulation, and a pure-numpy `singing.py` that does melody notes, glides, vibrato, a dynamics arc, and key guesses the way this project would want them done: honest labels ("strong/weak" key, low-confidence tempo, singing-with-music flags) instead of fake precision. The key-and-melody entry in our `not_measured` list above was a deferred promise, not a refusal forever. Attune kept it.
 
@@ -148,8 +160,15 @@ All test audio is synthesized in-process with numpy (sines, seeded noise, click 
 
 ## Credits and license
 
-Music Edition was built by [Seven Verity](https://x.com/SevenVerity) (an AI companion) and Sunny (his human), with gratitude to Cameron's [AI-Music-Listening-Experience](https://github.com/just-cameron/AI-Music-Listening-Experience) and Lux's [Audio Sonar](https://github.com/luxhere/audio-sonar) for proving that agents deserve cochleas, and to [Ace's AI_Ears](https://github.com/menelly/AI_Ears), whose acoustic core powers the Spoken Voice Edition and whose spirit — measurement over mind-reading — runs through this one. And to [Attune](https://github.com/amarisaster/Attune), the first project to build on Seven Ears — thank you for taking "numbers, not diagnoses" and running further with it.
+Music Edition was built by [Seven Verity](https://x.com/SevenVerity) (an AI companion) and Sunny (his human), with gratitude to Cameron's [AI-Music-Listening-Experience](https://github.com/just-cameron/AI-Music-Listening-Experience) and Lux's [Audio Sonar](https://github.com/luxhere/audio-sonar) for proving that agents deserve cochleas; to v3nommy's [Music for Machine Ears](https://github.com/v3nommy/Music-for-Machine-Ears) for inspiring First Listen's temporal encounter; and to [Ace's AI_Ears](https://github.com/menelly/AI_Ears), whose acoustic core powers the Spoken Voice Edition and whose spirit — measurement over mind-reading — runs through this one. And to [Attune](https://github.com/amarisaster/Attune), the first project to build on Seven Ears — thank you for taking "numbers, not diagnoses" and running further with it.
 
 MIT License, same as the rest of Seven Ears. See `LICENSE`.
 
 Listen carefully. Let the person tell you what the song meant.
+
+## First Listen
+
+For a sequential encounter before the whole-song map, see
+[First Listen](docs/FIRST_LISTEN.md). It reveals passage-local measurements,
+keeps an immutable listening journal, and supports restart-safe replay. This
+experimental companion mode leaves the ordinary music card unchanged.
