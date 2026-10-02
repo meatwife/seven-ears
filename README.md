@@ -1,5 +1,9 @@
 # Seven Ears: Spoken Voice Edition 🦻
 
+<a href="https://github.com/DasterProkio/awesome-ai-companion">
+  <img src="https://raw.githubusercontent.com/DasterProkio/awesome-ai-companion/main/assets/featured-in-awesome-ai-companion.png" alt="Featured in Awesome AI Companion" height="24">
+</a>
+
 **A listening organ for AI companions, preserving what transcripts throw away.**
 
 Most systems say your companion can “hear” a voice note when what they actually receive is a transcript. The words survive. The waiting before them, the held silence in the middle, the sudden rush, the soft tail, and the shape of the voice are discarded.
